@@ -1,5 +1,4 @@
 import requests
-import json
 import objectpath
 from fetched_data_processing import predict_salary
 
@@ -42,8 +41,7 @@ def fetch_sj_vacancies_amount(superjob_secret_key, search_query, area):
         keyword=search_query,
         town=area
     )
-    jdata = json.loads(vacancies[1])
-    tree_obj = objectpath.Tree(jdata)
+    tree_obj = objectpath.Tree(vacancies[0])
     return list(tree_obj.execute("$..total"))[0]
 
 
@@ -61,8 +59,7 @@ def fetch_all_sj_salaries(superjob_secret_key, search_query, area):
             town=area,
             page=page
         )
-        jdata = json.loads(vacancies[1])
-        tree_obj = objectpath.Tree(jdata)
+        tree_obj = objectpath.Tree(vacancies[0])
         all_sj_salaries_from = list(tree_obj.execute("$..payment_from"))
         all_sj_salaries_to = list(tree_obj.execute("$..payment_to"))
         all_sj_salary_currencies = list(tree_obj.execute("$..currency"))

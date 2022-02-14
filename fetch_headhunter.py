@@ -1,5 +1,4 @@
 import requests
-import json
 import objectpath
 from fetched_data_processing import predict_salary
 
@@ -16,7 +15,7 @@ def predict_rub_salary_hh(vacancy, area):
     return list(filter(lambda average_salary:
         average_salary,
         average_salaries
-        ))     
+        ))
 
 
 def fetch_hh_vacancies(**params):
@@ -32,8 +31,7 @@ def fetch_hh_areas(**params):
 
 
 def fetch_hh_area_id(area_name):
-    jdata = json.loads(fetch_hh_areas()[1])
-    tree_obj = objectpath.Tree(jdata)
+    tree_obj = objectpath.Tree(fetch_hh_areas()[0])
     try:
         return tuple(tree_obj.execute(f"$..areas[@.name is {area_name}]"))[0]["id"]
     except IndexError:
@@ -50,8 +48,7 @@ def fetch_all_hh_salaries(search_query, area):
             area=hh_area_id,
             page=page
         )
-        jdata = json.loads(vacancies[1])
-        tree_obj = objectpath.Tree(jdata)
+        tree_obj = objectpath.Tree(vacancies[0])
         all_hh_salaries += list(tree_obj.execute("$..salary"))
     return all_hh_salaries
 
