@@ -26,42 +26,50 @@ def main():
 
     for language in programming_languages:
 
-        average_hh_salaries = predict_rub_salary_hh(f"Программист {language}",
-                                                    town)
-        average_sj_salaries = predict_rub_salary_sj(superjob_secret_key,
-                                                    f"Программист {language}",
-                                                    town)
+        average_hh_salaries = predict_rub_salary_hh(
+            f"Программист {language}",
+            town
+        )
+        average_sj_salaries = predict_rub_salary_sj(
+            superjob_secret_key,
+            f"Программист {language}",
+            town
+        )
 
         hh_vacancies_processed = len(average_hh_salaries)
         sj_vacancies_processed = len(average_sj_salaries)
 
-        if hh_vacancies_processed != 0:
-            everage_hh_salary = int(sum(average_hh_salaries)/hh_vacancies_processed)
+        if hh_vacancies_processed:
+            average_hh_salary = int(
+                sum(average_hh_salaries) / hh_vacancies_processed
+            )
         else:
-            everage_hh_salary = None
+            average_hh_salary = None
 
-        if sj_vacancies_processed != 0:
-            everage_sj_salary = int(sum(average_sj_salaries)/sj_vacancies_processed)
+        if sj_vacancies_processed:
+            average_sj_salary = int(
+                sum(average_sj_salaries) / sj_vacancies_processed
+            )
         else:
-            everage_sj_salary = None
+            average_sj_salary = None
 
         hh_language_popularity[language] = {
                 "vacancies_found": fetch_hh_vacancies_amount(
-                                                    f"Программист {language}",
-                                                    town
-                                                            ),
+                    f"Программист {language}",
+                    town
+                ),
                 "vacancies_processed": hh_vacancies_processed,
-                "average_salary": everage_hh_salary
+                "average_salary": average_hh_salary
             }
 
         sj_language_popularity[language] = {
                 "vacancies_found": fetch_sj_vacancies_amount(
-                                                    superjob_secret_key,
-                                                    f"Программист {language}",
-                                                    town
-                                                            ),
+                    superjob_secret_key,
+                    f"Программист {language}",
+                    town
+                ),
                 "vacancies_processed": sj_vacancies_processed,
-                "average_salary": everage_sj_salary
+                "average_salary": average_sj_salary
             }
 
     print_asciitable(hh_language_popularity, "HeadHunter Moscow")

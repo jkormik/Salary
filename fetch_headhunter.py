@@ -8,8 +8,10 @@ def predict_rub_salary_hh(vacancy, area):
     average_salaries = []
     for salary in fetch_all_hh_salaries(vacancy, area):
         if salary and salary["currency"] == "RUR":
-            average_salaries.append(predict_salary(salary["from"],
-                                                   salary["to"]))
+            average_salaries.append(predict_salary(
+                salary["from"],
+                salary["to"]
+            ))
 
     return average_salaries
 
@@ -40,9 +42,11 @@ def fetch_all_hh_salaries(search_query, area):
     pages_found = fetch_hh_vacancies_pages_amount(search_query, area)
     all_hh_salaries = []
     for page in range(pages_found):
-        vacancies = fetch_hh_vacancies(text=search_query,
-                                       area=hh_area_id,
-                                       page=page)
+        vacancies = fetch_hh_vacancies(
+            text=search_query,
+            area=hh_area_id,
+            page=page
+        )
         jdata = json.loads(vacancies[1])
         tree_obj = objectpath.Tree(jdata)
         all_hh_salaries += list(tree_obj.execute("$..salary"))
@@ -58,4 +62,4 @@ def fetch_hh_vacancies_amount(search_query, area):
 def fetch_hh_vacancies_pages_amount(search_query, area):
     hh_area_id = fetch_hh_area_id(area)
     vacancies = fetch_hh_vacancies(text=search_query, area=hh_area_id)[0]
-    return vacancies["pages"]+1
+    return vacancies["pages"] + 1
