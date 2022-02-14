@@ -24,9 +24,11 @@ def print_asciitable(language_popularity, title):
 
 
 def predict_salary(salary_from, salary_to):
-    if salary_from in (None, 0):
+    if salary_from and salary_to:
+        (salary_from+salary_to) / 2
+    elif salary_from is None and salary_to is None:
+        return None
+    elif salary_from in (None, 0):
         return salary_to*0.8
     elif salary_to in (None, 0):
         return salary_from*1.2
-    else:
-        return (salary_from+salary_to) / 2

@@ -22,7 +22,10 @@ def predict_rub_salary_sj(superjob_secret_key, vacancy, area):
                 int(salary[1])
             ))
 
-    return average_salaries
+    return list(filter(lambda average_salary:
+        average_salary,
+        average_salaries
+        ))
 
 
 def fetch_sj_vacancies_pages_amount(superjob_secret_key, search_query, area):

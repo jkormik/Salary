@@ -13,7 +13,10 @@ def predict_rub_salary_hh(vacancy, area):
                 salary["to"]
             ))
 
-    return average_salaries
+    return list(filter(lambda average_salary:
+        average_salary,
+        average_salaries
+        ))     
 
 
 def fetch_hh_vacancies(**params):
