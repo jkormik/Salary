@@ -9,7 +9,11 @@ def fetch_sj_vacancies(superjob_secret_key, **params):
     }
     url = "https://api.superjob.ru/2.0/vacancies"
     response = requests.get(url, headers=headers, params=params)
-    return response.json(), response.text
+    response.raise_for_status()
+    decoded_response = response.json()
+    if "error" in decoded_response:
+        raise requests.exceptions.HTTPError(decoded_response["error"])
+    return decoded_response
 
 
 def predict_rub_salary_sj(superjob_secret_key, vacancy, area):
@@ -41,7 +45,7 @@ def fetch_sj_vacancies_amount(superjob_secret_key, search_query, area):
         keyword=search_query,
         town=area
     )
-    tree_obj = objectpath.Tree(vacancies[0])
+    tree_obj = objectpath.Tree(vacancies)
     return list(tree_obj.execute("$..total"))[0]
 
 
@@ -59,7 +63,7 @@ def fetch_all_sj_salaries(superjob_secret_key, search_query, area):
             town=area,
             page=page
         )
-        tree_obj = objectpath.Tree(vacancies[0])
+        tree_obj = objectpath.Tree(vacancies)
         all_sj_salaries_from = list(tree_obj.execute("$..payment_from"))
         all_sj_salaries_to = list(tree_obj.execute("$..payment_to"))
         all_sj_salary_currencies = list(tree_obj.execute("$..currency"))
