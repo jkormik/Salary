@@ -11,7 +11,6 @@ def predict_rub_salary_hh(vacancy, hh_area_id):
                 salary["from"],
                 salary["to"]
             ))
-
     return list(filter(lambda average_salary:
         average_salary,
         average_salaries
@@ -28,22 +27,14 @@ def fetch_hh_vacancies(**params):
     return decoded_response
 
 
-def fetch_hh_areas(**params):
-    url = "https://api.hh.ru/areas"
+def fetch_hh_area_id(**params):
+    url = "https://api.hh.ru/suggests/areas"
     response = requests.get(url, params=params)
     response.raise_for_status()
     decoded_response = response.json()
     if "error" in decoded_response:
         raise requests.exceptions.HTTPError(decoded_response["error"])
-    return decoded_response
-
-
-def fetch_hh_area_id(area_name):
-    tree_obj = objectpath.Tree(fetch_hh_areas())
-    try:
-        return tuple(tree_obj.execute(f"$..areas[@.name is {area_name}]"))[0]["id"]
-    except IndexError:
-        return None
+    return decoded_response["items"][0]["id"]
 
 
 def fetch_all_hh_salaries(search_query, hh_area_id):

@@ -24,7 +24,7 @@ def main():
     hh_language_popularity = {}
     sj_language_popularity = {}
 
-    hh_area_id = fetch_hh_area_id(town)
+    hh_area_id = fetch_hh_area_id(text=town)
 
     for language in programming_languages:
 
